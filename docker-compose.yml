@@ -1,0 +1,25 @@
+version: '3'
+volumes:
+  dados:
+networks: 
+  zootfnet:
+    driver: bridge
+services:
+  zootfdb:
+    image: postgres:13.0-alpine
+    container_name: pg_zootfdb
+    restart: always
+    volumes:
+      # dados
+      - dados:/var/lib/postgresql/data
+      # scripts
+      - ./db:/scripts
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - TZ=America/Sao_Paulo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks: 
+      - zootfnet
